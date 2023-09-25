@@ -4,6 +4,7 @@ const socketIo = require('socket.io');
 const path = require('path'); 
 const app = express();
 const server = http.createServer(app);
+const env = require('dotenv').config();
 const io = socketIo(server);
 
 app.set('view engine', 'ejs');
@@ -34,6 +35,6 @@ io.on('connection', (socket) => {
 
 // Start the server
 const port = 3000; // Change this to your desired port
-server.listen(port, 'ENTER IP', () => {
-  console.log(`Server is running on server`);
+server.listen(port, process.env.IP, () => {
+  console.log(`Server is running on server ${process.env.IP}`);
 });
