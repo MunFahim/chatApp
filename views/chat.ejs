@@ -1,0 +1,59 @@
+<!-- views/chat.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socket.io Chat</title>
+</head>
+<body>
+  <ul id="messages"></ul>
+  <form id="message-form">
+    <input id="message-input" autocomplete="off" /><button id="send-button">Send</button>
+  </form>
+  
+  <!-- Load the external socket.io.js script -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // script.js
+
+// Connect to the Socket.io server (Make sure this script is loaded after socket.io.js)
+const socket = io();
+
+// Function to send a message
+function sendMessage() {
+  const messageInput = document.getElementById('message-input');
+  const message = messageInput.value.trim();
+
+  if (message) {
+    // Emit a 'chat message' event to the server
+    socket.emit('chat message', message);
+
+    // Clear the message input field
+    messageInput.value = '';
+  }
+}
+
+// Function to handle incoming messages
+function receiveMessage(message) {
+  const messagesList = document.getElementById('messages');
+  const messageItem = document.createElement('li');
+  messageItem.textContent = message;
+  messagesList.appendChild(messageItem);
+}
+
+// Listen for the 'chat message' event from the server
+socket.on('chat message', (message) => {
+  receiveMessage(message);
+});
+
+// Handle form submission (sending messages)
+document.getElementById('message-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  sendMessage();
+});
+  </script>
+</body>
+</html>
